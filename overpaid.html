@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Whose Agent Deserves a Raise?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--bg:#F0F1EF;--surface:#FFFFFF;--ink:#111211;--muted:#5E625E;--line:#D9DCD7;--accent:#2C7A4B;--over:#B4532A;--bargain:#2F7D55;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141614;--surface:#1C1F1C;--ink:#F1F2F0;--muted:#8F958F;--line:#2C302C;--accent:#93DCAA;--over:#E08A63;--bargain:#6BBF8E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141614;--surface:#1C1F1C;--ink:#F1F2F0;--muted:#8F958F;--line:#2C302C;--accent:#93DCAA;--over:#E08A63;--bargain:#6BBF8E;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.6 "Source Sans 3",system-ui,sans-serif}
+main{max-width:1080px;margin:0 auto;padding:32px 20px 64px}
+a{color:var(--accent)}
+.back{font-size:.92rem;text-decoration:none}
+.tag{font-size:.78rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:28px 0 8px}
+h1{font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:clamp(2.2rem,6vw,3.2rem);line-height:1.1;margin:0 0 12px;color:var(--ink);text-wrap:balance}
+.dek{font-size:1.15rem;max-width:62ch;margin:0 0 24px}
+figure{margin:0 0 36px;background:#FBFBFA;border:1px solid var(--line);border-radius:4px;overflow:auto}
+figure img{display:block;width:100%;min-width:720px;height:auto}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px}
+h2{font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:1.4rem;margin:0 0 10px;line-height:1.2}
+p{margin:0 0 12px;max-width:65ch}
+ol{margin:0;padding:0;list-style:none;font-size:.95rem;font-variant-numeric:tabular-nums}
+ol li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
+ol li:last-child{border-bottom:1px solid var(--line)}
+.o h2{color:var(--over)}.b h2{color:var(--bargain)}
+.dim{color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="../index.html">← Back to portfolio</a>
+  <p class="tag">NBA · 2025-26 · 50 highest-paid players with 30+ games</p>
+  <h1>Whose Agent Deserves a Raise?</h1>
+  <p class="dek">Salary against on-court production for the NBA's highest-paid players, split into four quadrants at the group median.</p>
+  <figure><img src="overpaid-chart.png" alt="Four-quadrant scatter plot of 2025-26 salary against Production Index for the 50 highest-paid NBA players, with most overpaid and best bargain lists"></figure>
+
+  <div class="cols">
+    <div>
+      <h2>Method</h2>
+      <p>The Production Index blends VORP, Win Shares and Box Plus/Minus as equal-weighted z-scores, rescaled to 0–100. Players are ranked by salary and by production; the gap between those ranks decides who is most overpaid and who is the best bargain.</p>
+      <p class="dim">Players with fewer than 30 games were excluded, including Anthony Davis, Jayson Tatum, Trae Young, Tyrese Haliburton, Domantas Sabonis, Ja Morant, Kyrie Irving and Dejounte Murray. Data: Basketball-Reference, Hoops Rumors.</p>
+    </div>
+    <div class="o">
+      <h2>Most overpaid</h2>
+      <ol>
+        <li><span>1 · Zach LaVine</span><span>$47.5M · idx 11</span></li>
+        <li><span>2 · Paul George</span><span>$51.7M · idx 23</span></li>
+        <li><span>3 · Joel Embiid</span><span>$55.2M · idx 36</span></li>
+        <li><span>4 · Darius Garland</span><span>$39.4M · idx 18</span></li>
+        <li><span>5 · Devin Booker</span><span>$53.1M · idx 36</span></li>
+      </ol>
+    </div>
+    <div class="b">
+      <h2>Best bargains</h2>
+      <ol>
+        <li><span>1 · Alperen Sengun</span><span>$33.9M · idx 48</span></li>
+        <li><span>2 · Shai Gilgeous-Alexander</span><span>$38.3M · idx 91</span></li>
+        <li><span>3 · Tyrese Maxey</span><span>$38.0M · idx 56</span></li>
+      </ol>
+    </div>
+  </div>
+</main>
+</body>
+</html>

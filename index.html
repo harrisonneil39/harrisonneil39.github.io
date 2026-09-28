@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Harrison Neil: Business Analytics & Information Systems student at Suffolk University. Analytics, machine learning and sports projects.">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Harrison Neil Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Source+Sans+3:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F0F1EF; --soft:#FFFFFF; --ink:#111211; --body:#2B2D2B; --muted:#5E625E; --line:#D9DCD7;
+  --accent:#2C7A4B; --green:#B5EBC4;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141614; --soft:#1C1F1C; --ink:#F1F2F0; --body:#CDD1CC; --muted:#8F958F; --line:#2C302C;
+    --accent:#93DCAA; --green:#93DCAA; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141614; --soft:#1C1F1C; --ink:#F1F2F0; --body:#CDD1CC; --muted:#8F958F; --line:#2C302C;
+  --accent:#93DCAA; --green:#93DCAA; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--bg);color:var(--body);font-family:var(--sans);font-size:17px;line-height:1.65;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+h1,h2,h3{font-family:var(--serif);color:var(--ink);font-weight:600;text-wrap:balance;margin:0}
+.label{font-size:.78rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0}
+
+/* TOP BAR */
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-block:22px;border-bottom:1px solid var(--line);font-size:.95rem}
+.top .me{font-weight:600;color:var(--ink)}
+.top nav{display:flex;gap:22px;flex-wrap:wrap}
+.top nav a{color:var(--muted);text-decoration:none}
+.top nav a:hover{color:var(--ink)}
+
+/* INTRO */
+.intro{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:56px;padding-block:64px 56px;border-bottom:1px solid var(--line)}
+h1{font-size:clamp(2.4rem,6vw,3.4rem);line-height:1.08;margin-bottom:10px;letter-spacing:-.01em}
+.role{font-size:1.15rem;color:var(--muted);margin:0 0 28px}
+.bio p{margin:0 0 16px;max-width:64ch}
+.facts{align-self:start;background:var(--soft);border:1px solid var(--line);border-top:4px solid var(--green);padding:10px 20px 6px;border-radius:4px;display:grid;gap:0}
+.facts div{padding:12px 0;border-bottom:1px solid var(--line)}
+.facts div:last-child{border-bottom:0}
+.facts dt{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:2px 0 0;color:var(--ink);font-size:.98rem}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-flex;align-items:center;font-weight:600;font-size:.95rem;text-decoration:none;padding:10px 18px;border:1px solid var(--ink);color:var(--ink);border-radius:3px}
+.btn:hover{background:var(--soft)}
+.btn.solid{background:var(--green);border-color:var(--green);color:#111211}
+.btn.solid:hover{background:var(--green);filter:brightness(.95);opacity:1}
+
+/* SECTIONS */
+section{padding-block:56px 16px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+h2{font-size:1.9rem;line-height:1.15}
+
+/* PROJECTS */
+.proj{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:40px;padding-block:36px;border-bottom:1px solid var(--line)}
+.proj:first-of-type{border-top:1px solid var(--line);margin-top:20px}
+.shot{display:block;align-self:start;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--soft);box-shadow:0 1px 2px rgba(0,0,0,.05);aspect-ratio:16/10;max-width:100%}
+.shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:top center}
+.shot:hover{border-color:var(--muted)}
+.proj-body{display:flex;flex-direction:column;gap:12px}
+.proj .label{margin-bottom:-4px}
+h3{font-size:1.55rem;line-height:1.2}
+.proj p{margin:0;max-width:62ch}
+.q{color:var(--ink);font-weight:500}
+.stats{display:flex;flex-wrap:wrap;gap:28px;margin:4px 0 0;padding:0}
+.stats div{display:flex;flex-direction:column}
+.stats dt{order:2;font-size:.8rem;color:var(--muted)}
+.stats dd{order:1;margin:0;font-family:var(--serif);font-size:1.35rem;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.3}
+.methods{font-size:.92rem;color:var(--muted)}
+.methods strong{color:var(--body);font-weight:600}
+.open{font-weight:600;text-decoration:none;align-self:flex-start;color:var(--ink);border-bottom:3px solid var(--green);padding-bottom:1px}
+.open:hover{background:var(--green);color:#111211}
+
+/* EXPERIENCE */
+.two{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:56px}
+.xp{list-style:none;margin:20px 0 0;padding:0}
+.xp li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:20px;padding:18px 0;border-top:1px solid var(--line)}
+.xp li:last-child{border-bottom:1px solid var(--line)}
+.when{font-size:.9rem;color:var(--muted);padding-top:2px;font-variant-numeric:tabular-nums}
+.xp h4{margin:0;font-size:1.02rem;color:var(--ink);font-weight:600}
+.xp h4 span{font-weight:400;color:var(--muted)}
+.xp p{margin:4px 0 0;font-size:.97rem;max-width:60ch}
+.side{margin-top:20px}
+.side-block{padding:18px 0;border-top:1px solid var(--line)}
+.side-block:last-child{border-bottom:1px solid var(--line)}
+.side-block .label{margin-bottom:8px}
+.side p{margin:0 0 4px;font-size:.97rem}
+.side strong{color:var(--ink);font-weight:600}
+.side .dim{color:var(--muted);font-size:.92rem;margin-bottom:12px}
+
+/* CONTACT */
+.contact{margin-top:64px;background:var(--soft);border-top:1px solid var(--line)}
+.contact .cgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;padding-block:56px}
+.contact h2{margin-bottom:12px}
+.contact p{margin:0;max-width:48ch}
+.status{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;color:#111211;background:var(--green);padding:4px 12px;border-radius:999px;margin-bottom:14px}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:#1E6B3E}
+.clist{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.clist li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.clist .k{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);min-width:80px}
+.clist .v{color:var(--ink);font-weight:500;flex:1;user-select:all;overflow-wrap:anywhere}
+.clist a.v{user-select:auto;text-decoration:none;color:var(--accent)}
+.clist a.v:hover{text-decoration:underline}
+.copy{font:inherit;font-size:.8rem;padding:3px 10px;border:1px solid var(--line);background:var(--bg);color:var(--muted);border-radius:3px;cursor:pointer}
+.copy:hover{color:var(--ink);border-color:var(--muted)}
+.fine{max-width:none!important;font-size:.85rem;color:var(--muted);padding-block:18px 28px;border-top:1px solid var(--line)}
+
+@media (max-width:860px){
+  .intro{grid-template-columns:1fr;gap:36px;padding-block:44px 40px}
+  .proj{grid-template-columns:1fr;gap:20px}
+  .two{grid-template-columns:1fr;gap:24px}
+  .contact .cgrid{grid-template-columns:1fr;gap:28px}
+}
+@media (max-width:480px){
+  .wrap{padding:0 16px}
+  .xp li{grid-template-columns:1fr;gap:2px}
+  .top nav{gap:16px}
+}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <span class="me">Harrison Neil</span>
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+      <a href="Harrison_Neil_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+    </nav>
+  </div>
+
+  <header class="intro">
+    <div>
+      <h1>Harrison Neil</h1>
+      <p class="role">Business Analytics &amp; Information Systems · Suffolk University</p>
+      <div class="bio">
+        <p>I'm a Business Analytics and Information Systems student at Suffolk University with a concentration in Artificial Intelligence, holding a 3.7 GPA and a place on the Dean's List. I also compete on Suffolk's NCAA varsity men's basketball team. Before Suffolk, I studied Business and Management at Rensselaer Polytechnic Institute.</p>
+        <p>My work focuses on using data to support real decisions. As an Associate Process Analyst at AVS Bio, I applied machine learning, AI and data analytics to an SPF egg production supply chain to improve operational efficiency. On my own, I build analytics projects, from an outbreak scenario model for egg production operations to regression studies of NBA strategy and a machine-learning model that projects NFL player performance.</p>
+        <p>I've also run a business. I founded Good Hoops Basketball Training and managed its operations, marketing and client relationships for two years. That experience taught me to connect analysis to what an organization actually needs, and to explain findings clearly to people who aren't analysts.</p>
+      </div>
+      <div class="actions">
+        <a class="btn solid" href="Harrison_Neil_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a class="btn" href="#contact">Get in touch</a>
+      </div>
+    </div>
+    <dl class="facts">
+      <div><dt>Based in</dt><dd>Boston, MA</dd></div>
+      <div><dt>Education</dt><dd>B.S. Business Analytics &amp; IS, Suffolk University, 2027</dd></div>
+      <div><dt>Focus</dt><dd>Data analytics, machine learning, AI for business</dd></div>
+      <div><dt>Tools</dt><dd>Python, Excel, XGBoost, Claude</dd></div>
+      <div><dt>Status</dt><dd>Open to internships and full-time roles</dd></div>
+    </dl>
+  </header>
+
+  <section id="projects">
+    <div class="sec-head">
+      <h2>Selected projects</h2>
+      <p class="label">Select any project to open it</p>
+    </div>
+
+    <article class="proj">
+      <a class="shot" href="projects/smart-picks.html" aria-label="Open Smart Picks">
+        <img src="img/thumb-smart-picks.jpg" alt="Smart Picks app home screen">
+      </a>
+      <div class="proj-body">
+        <p class="label">NFL · 2024 season · Machine learning application</p>
+        <h3>Smart Picks</h3>
+        <p class="q">A sports betting prediction tool for NFL player props.</p>
+        <p>Smart Picks projects a player's output for 12 prop types (passing yards, receptions and more) against a specific opponent and venue. An XGBoost model trained on rolling 3-, 5- and 10-game averages and opponent defensive data produces the projection. When a sportsbook line is entered, 2,000 bootstrap simulations turn it into an over/under pick with a confidence level. Four research views show the recent form, matchup history, home/away split and defensive context behind each prediction.</p>
+        <dl class="stats">
+          <div><dt>Players covered</dt><dd>457</dd></div>
+          <div><dt>Passing yards MAE</dt><dd>~9 yds</dd></div>
+          <div><dt>Simulations per pick</dt><dd>2,000</dd></div>
+        </dl>
+        <p class="methods"><strong>Methods:</strong> Python, XGBoost regression, nflverse play data, bootstrap simulation</p>
+        <a class="open" href="projects/smart-picks.html">Open the tool →</a>
+      </div>
+    </article>
+
+    <article class="proj">
+      <a class="shot" href="projects/spf-outbreak.html" aria-label="Open SPF Flock Platform">
+        <img src="img/thumb-spf-outbreak.jpg" alt="SPF Flock Platform operations overview with location status and production charts">
+      </a>
+      <div class="proj-body">
+        <p class="label">Supply chain operations · Interactive simulation</p>
+        <h3>SPF Flock Outbreak Scenario Model</h3>
+        <p class="q">If a disease outbreak spreads through an egg production network, what does waiting cost?</p>
+        <p>An operations dashboard for a specific-pathogen-free (SPF) egg producer with 45 houses across 11 locations, inspired by my internship work in an SPF egg production supply chain. A week-by-week model simulates disease spreading within and between locations and compares four responses (no action, a phased remediation plan, an immediate response and a custom scenario) on lost production and cumulative cost over 52 weeks. A financial view weighs the 12-month cost of inaction against the remediation investment.</p>
+        <dl class="stats">
+          <div><dt>Houses modeled</dt><dd>45</dd></div>
+          <div><dt>Simulation horizon</dt><dd>52 wks</dd></div>
+          <div><dt>Response strategies</dt><dd>4</dd></div>
+        </dl>
+        <p class="methods"><strong>Methods:</strong> Stochastic spread simulation, scenario analysis, cost-of-inaction modeling, JavaScript and Chart.js</p>
+        <p class="methods"><strong>Note:</strong> All location names and dollar and production figures are anonymized and scaled, and do not reflect actual company data.</p>
+        <a class="open" href="projects/spf-outbreak.html">Run the simulation →</a>
+      </div>
+    </article>
+
+    <article class="proj">
+      <a class="shot" href="projects/overpaid.html" aria-label="Open Whose Agent Deserves a Raise?">
+        <img src="img/thumb-overpaid.jpg" alt="Four-quadrant chart of NBA salary against production index for the 50 highest-paid players">
+      </a>
+      <div class="proj-body">
+        <p class="label">NBA · 2025-26 season · Data visualization</p>
+        <h3>Whose Agent Deserves a Raise?</h3>
+        <p class="q">Which of the league's 50 highest-paid players are producing like it?</p>
+        <p>I built a 0–100 Production Index from VORP, Win Shares and Box Plus/Minus, then ranked the gap between each player's salary rank and production rank. Zach LaVine topped the overpaid list, while Alperen Sengun and Shai Gilgeous-Alexander led the bargains.</p>
+        <dl class="stats">
+          <div><dt>Players analyzed</dt><dd>50</dd></div>
+          <div><dt>LaVine: salary / index</dt><dd>$47.5M / 11</dd></div>
+          <div><dt>SGA: salary / index</dt><dd>$38.3M / 91</dd></div>
+        </dl>
+        <p class="methods"><strong>Methods:</strong> Basketball-Reference and Hoops Rumors data, z-score composite index, rank-gap scoring, quadrant analysis</p>
+        <a class="open" href="projects/overpaid.html">View the chart →</a>
+      </div>
+    </article>
+
+    <article class="proj">
+      <a class="shot" href="projects/crash-or-get-back.html" aria-label="Open Should You Crash or Get Back?">
+        <img src="img/thumb-crash-or-get-back.jpg" alt="Scatter plot of all 30 NBA teams, offensive rebound rate against transition points allowed">
+      </a>
+      <div class="proj-body">
+        <p class="label">NBA · 2025-26 season · Interactive report</p>
+        <h3>Should You Crash or Get Back?</h3>
+        <p class="q">Does crashing the offensive glass leave a team exposed in transition?</p>
+        <p>Across all 30 teams, offensive rebounding rate and transition points allowed were essentially unrelated. A team's own turnover rate was the real driver of transition defense, and with turnovers held constant, rebounding had no significant effect. Together, the three factors explained about 80% of the variation in net rating.</p>
+        <dl class="stats">
+          <div><dt>OREB% vs transition D</dt><dd>r = 0.02</dd></div>
+          <div><dt>Turnover % vs transition D</dt><dd>r = 0.51</dd></div>
+          <div><dt>Net rating explained</dt><dd>~80%</dd></div>
+        </dl>
+        <p class="methods"><strong>Methods:</strong> NBA.com advanced and play-type data, per-100-possession normalization, multiple regression with standardized coefficients</p>
+        <a class="open" href="projects/crash-or-get-back.html">Read the analysis →</a>
+      </div>
+    </article>
+  </section>
+
+  <section id="experience">
+    <div class="two">
+      <div>
+        <h2>Experience</h2>
+        <ul class="xp">
+          <li><span class="when">Summer 2026</span><div><h4>AVS Bio <span>· Associate Process Analyst · Remote</span></h4><p>Used machine learning, AI and data analytics to support decision-making in an SPF egg production supply chain, improving operational efficiency and performance.</p></div></li>
+          <li><span class="when">Summer 2026</span><div><h4>Fanatics, FIFA World Cup <span>· Retail Associate · Boston</span></h4><p>Contributed to the launch and operation of Fanatics World Cup retail locations, supporting merchandising, inventory coordination and fan engagement.</p></div></li>
+          <li><span class="when">2023–2025</span><div><h4>Good Hoops Basketball Training <span>· Founder &amp; Owner · Warwick, NY</span></h4><p>Founded and ran a youth basketball training business, managing operations, marketing, client relations and skill development programs.</p></div></li>
+          <li><span class="when">Summer 2025</span><div><h4>Lithia Motors <span>· Inventory Specialist · Ramsey, NJ</span></h4><p>Coordinated vehicle transport between dealerships, organized inventory and assisted with test drives to support sales operations.</p></div></li>
+        </ul>
+      </div>
+      <aside>
+        <h2>Education</h2>
+        <div class="side">
+          <div class="side-block">
+            <p><strong>Suffolk University</strong></p>
+            <p class="dim">B.S. Business Analytics &amp; Information Systems, Artificial Intelligence concentration · 2025–2027 · GPA 3.7, Dean's List</p>
+            <p><strong>Rensselaer Polytechnic Institute</strong></p>
+            <p class="dim" style="margin-bottom:0">B.S. Business and Management · 2023–2025</p>
+          </div>
+          <div class="side-block">
+            <p class="label">Activities</p>
+            <p>NCAA Varsity Men's Basketball, 2023–present</p>
+            <p>Suffolk Sports in Business Club</p>
+            <p>Suffolk Business Analytics Club</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<footer class="contact" id="contact">
+  <div class="wrap cgrid">
+    <div>
+      <p class="status">Open to work</p>
+      <h2>Let's connect</h2>
+      <p>I'm open to internships and full-time opportunities in analytics, data, AI and business roles. The best way to reach me is by email or phone.</p>
+    </div>
+    <ul class="clist">
+      <li><span class="k">Email</span><span class="v" id="c-email">harrisonneil39@gmail.com</span><button class="copy" type="button" data-copy="c-email" id="copy-email">Copy</button></li>
+      <li><span class="k">Phone</span><span class="v" id="c-phone">(845) 545-9126</span><button class="copy" type="button" data-copy="c-phone" id="copy-phone">Copy</button></li>
+      <li><span class="k">LinkedIn</span><a class="v" href="https://www.linkedin.com/in/harrison-neil-92723332b/" target="_blank" rel="noopener">linkedin.com/in/harrison-neil-92723332b</a></li>
+      <li><span class="k">Resume</span><a class="v" href="Harrison_Neil_Resume.pdf" target="_blank" rel="noopener">Harrison_Neil_Resume.pdf</a></li>
+    </ul>
+  </div>
+  <div class="wrap"><p class="fine">© 2026 Harrison Neil · Boston, MA</p></div>
+</footer>
+
+<script>
+document.querySelectorAll('.copy').forEach(function(b){
+  b.addEventListener('click',function(){
+    var el=document.getElementById(b.dataset.copy), t=el.textContent;
+    function done(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1600)}
+    function sel(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected'}
+    try{navigator.clipboard.writeText(t).then(done,sel)}catch(e){sel()}
+  });
+});
+</script>
+
+</body>
+</html>

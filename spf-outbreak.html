@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>SPF Flock Platform</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  color-scheme:light;
+  --navy:#0d1b2a; --navy2:#162033; --teal:#3a85a0; --teal2:#4da3c4;
+  --red:#c0392b; --amber:#d4891a; --green:#1e8449; --blue:#2563eb;
+  --bg:#f4f7fa; --card:#fff; --border:#e2e8f0;
+  --text:#1a2332; --muted:#6b7a8d; --light:#f8fafc;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;}
+
+/* ── NAV ── */
+nav{background:var(--navy);display:flex;align-items:center;padding:0 24px;height:56px;gap:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px #0006;}
+.nav-brand{display:flex;align-items:center;gap:10px;margin-right:32px;text-decoration:none;}
+.nav-logo{width:32px;height:32px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;letter-spacing:-1px;}
+.nav-title{color:#e8f4f8;font-size:15px;font-weight:700;}
+.nav-sub{color:#5a7a8e;font-size:11px;margin-top:1px;}
+.nav-tabs{display:flex;gap:2px;flex:1;}
+.nav-tab{padding:0 18px;height:56px;display:flex;align-items:center;color:#8ab4c8;font-size:13px;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;white-space:nowrap;}
+.nav-tab:hover{color:#e8f4f8;background:#ffffff0a;}
+.nav-tab.active{color:#fff;border-bottom-color:var(--teal2);font-weight:600;}
+.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto;}
+.nav-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#dc354522;color:#ff8080;border:1px solid #dc354544;}
+.nav-badge.amber{background:#d4891a22;color:#f0a030;border-color:#d4891a44;}
+.nav-badge.green{background:#1e844922;color:#2ecc71;border-color:#1e844944;}
+.nav-time{color:#5a7a8e;font-size:11px;}
+
+/* ── PAGES ── */
+.page{display:none;padding:24px;max-width:1300px;margin:0 auto;}
+.page.active{display:block;}
+
+/* ── SECTION HEADER ── */
+.sec-hdr{margin-bottom:16px;}
+.sec-hdr h2{font-size:18px;font-weight:700;color:var(--navy);}
+.sec-hdr p{color:var(--muted);font-size:13px;margin-top:3px;}
+
+/* ── CARDS ── */
+.card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:20px;}
+.card-sm{padding:14px 16px;}
+.card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--teal);margin-bottom:12px;}
+
+/* ── KPI ROW ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+.kpi{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:16px 18px;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--teal);}
+.kpi.red::before{background:var(--red);}
+.kpi.amber::before{background:var(--amber);}
+.kpi.green::before{background:var(--green);}
+.kpi.blue::before{background:var(--blue);}
+.kpi-val{font-size:26px;font-weight:800;line-height:1;color:var(--navy);}
+.kpi.red .kpi-val{color:var(--red);}
+.kpi.amber .kpi-val{color:var(--amber);}
+.kpi.green .kpi-val{color:var(--green);}
+.kpi.blue .kpi-val{color:var(--blue);}
+.kpi-lbl{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4;}
+.kpi-delta{font-size:10px;font-weight:700;margin-top:4px;}
+.kpi-delta.down{color:var(--red);}
+.kpi-delta.up{color:var(--green);}
+
+/* ── GRID LAYOUTS ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.grid-sidebar{display:grid;grid-template-columns:280px 1fr;gap:16px;}
+
+/* ── LOCATION CARDS ── */
+.loc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.loc-card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:14px 16px;transition:box-shadow .15s;}
+.loc-card:hover{box-shadow:0 4px 16px #0001;}
+.loc-card.break{border-left:4px solid var(--red);}
+.loc-card.clean{border-left:4px solid var(--green);}
+.loc-card.remediating{border-left:4px solid var(--amber);}
+.loc-card.restored{border-left:4px solid var(--blue);}
+.loc-name{font-weight:700;font-size:13px;color:var(--navy);}
+.loc-cluster{font-size:11px;color:var(--muted);margin-top:1px;}
+.loc-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
+.loc-stat{text-align:right;}
+.loc-stat-val{font-size:16px;font-weight:800;color:var(--navy);}
+.loc-stat-lbl{font-size:10px;color:var(--muted);}
+.pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
+.pill-break{background:#fde8e8;color:var(--red);}
+.pill-clean{background:#e8f8ee;color:var(--green);}
+.pill-rem{background:#fdf3e3;color:var(--amber);}
+.pill-rest{background:#e8f4f8;color:var(--blue);}
+.house-row{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
+.h-dot{width:13px;height:13px;border-radius:50%;}
+.h-dot.clean{background:var(--green);}
+.h-dot.infected{background:var(--red);}
+.h-dot.remediating{background:var(--amber);}
+.h-dot.restored{background:var(--blue);}
+
+/* ── SIMULATION CONTROLS ── */
+.sim-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start;}
+.sidebar-card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:14px;}
+.ctrl-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--teal);padding-bottom:6px;border-bottom:1px solid var(--border);}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;}
+.field label span{font-weight:700;color:var(--text);}
+input[type=range]{width:100%;accent-color:var(--teal);cursor:pointer;height:4px;}
+.preset-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.p-btn{padding:7px 6px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;background:var(--light);color:var(--muted);transition:all .15s;text-align:center;}
+.p-btn:hover{border-color:var(--teal);color:var(--teal);}
+.p-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.speed-row{display:flex;gap:4px;}
+.sp-btn{flex:1;padding:6px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;background:var(--light);color:var(--muted);}
+.sp-btn.active{background:var(--teal);color:#fff;border-color:var(--teal);}
+.run-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.btn{padding:9px 12px;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s;}
+.btn-run{background:var(--teal);color:#fff;}
+.btn-run:hover{background:#2d6a80;}
+.btn-rst{background:var(--light);color:var(--text);border:1px solid var(--border);}
+.btn-rst:hover{background:var(--border);}
+.chk-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);cursor:pointer;}
+input[type=checkbox]{accent-color:var(--teal);width:14px;height:14px;}
+select{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:7px;font-size:12px;background:#fff;color:var(--text);}
+
+/* ── WEEK PROGRESS ── */
+.week-hdr{display:flex;align-items:center;gap:16px;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:14px 18px;margin-bottom:14px;}
+.wk-num{font-size:28px;font-weight:900;color:var(--navy);min-width:100px;}
+.wk-date{font-size:12px;color:var(--muted);}
+.wk-bar-wrap{flex:1;}
+.wk-bar-track{height:6px;background:var(--bg);border-radius:3px;overflow:hidden;margin-top:6px;}
+.wk-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--teal2));border-radius:3px;transition:width .3s;}
+.wk-stats{display:flex;gap:20px;margin-left:auto;}
+.wk-stat{text-align:center;}
+.wk-stat-v{font-size:18px;font-weight:800;color:var(--navy);}
+.wk-stat-l{font-size:10px;color:var(--muted);}
+.wk-stat.red .wk-stat-v{color:var(--red);}
+.wk-stat.green .wk-stat-v{color:var(--green);}
+.event-pill{background:#dc354522;color:#c0392b;border:1px solid #dc354544;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;display:none;}
+.event-pill.show{display:inline-block;}
+
+/* ── CHARTS ── */
+.chart-wrap{position:relative;}
+.h160{height:160px;}
+.h200{height:200px;}
+.h220{height:220px;}
+.chart-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
+.leg-line{width:18px;height:3px;border-radius:2px;}
+
+/* ── LOG ── */
+.log{background:var(--navy);color:#4da3c4;border-radius:8px;padding:10px 12px;font-family:'Courier New',monospace;font-size:11px;height:96px;overflow-y:auto;line-height:1.7;}
+.log .w{color:#ffc107;}
+.log .d{color:#ff8080;}
+.log .g{color:#51cf66;}
+
+/* ── FINANCIAL PAGE ── */
+.fin-table{width:100%;border-collapse:collapse;font-size:13px;}
+.fin-table th{padding:10px 12px;text-align:left;background:var(--navy);color:#e8f4f8;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
+.fin-table th.r{text-align:right;}
+.fin-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.fin-table td.r{text-align:right;}
+.fin-table tr:last-child td{border-bottom:none;}
+.fin-table tr:nth-child(even) td{background:var(--light);}
+.total-row td{font-weight:700;background:#fde8e8 !important;color:var(--red);}
+.total-row.green td{background:#e8f8ee !important;color:var(--green);}
+
+/* ── SCENARIO SUMMARY ── */
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;}
+.sum-card{border-radius:10px;padding:14px;text-align:center;}
+.sum-card.noaction{background:#f0fdf4;border:1px solid #1e844933;}
+.sum-card.phase{background:#fffbeb;border:1px solid #d4891a33;}
+.sum-card.immed{background:#eff6ff;border:1px solid #2563eb33;}
+.sum-card.scenario{background:#fef2f2;border:1px solid #c0392b33;}
+.sum-label{font-size:11px;font-weight:700;margin-bottom:8px;}
+.sum-card.noaction .sum-label{color:var(--green);}
+.sum-card.phase .sum-label{color:var(--amber);}
+.sum-card.immed .sum-label{color:var(--blue);}
+.sum-card.scenario .sum-label{color:var(--red);}
+.sum-val{font-size:20px;font-weight:900;color:var(--navy);}
+.sum-sub{font-size:10px;color:var(--muted);margin-top:3px;}
+</style>
+</head>
+<body><a href="../index.html" style="position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:9999;font:600 13px/1 system-ui,-apple-system,sans-serif;padding:10px 14px;border-radius:4px;background:#B5EBC4;color:#111211;border:1px solid #111211;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25)">&larr; Portfolio</a><div style="background:#FFF7DB;color:#5A4A12;font:500 12.5px/1.4 system-ui,-apple-system,sans-serif;padding:8px 16px;text-align:center;border-bottom:1px solid #EADFB5">Portfolio demo: location names, house IDs and all dollar and case figures are anonymized and scaled, and do not reflect actual company data.</div>
+<!-- ── NAV ── -->
+<nav>
+<div class="nav-brand">
+<div class="nav-logo">SP<br/>F</div>
+<div>
+<div class="nav-title">SPF Flock Platform</div>
+<div class="nav-sub">Operations Intelligence</div>
+</div>
+</div>
+<div class="nav-tabs">
+<div class="nav-tab active" onclick="goto('overview')">Overview</div>
+<div class="nav-tab" onclick="goto('simulation')">Outbreak Simulation</div>
+<div class="nav-tab" onclick="goto('financial')">Financial Impact</div>
+<div class="nav-tab" onclick="goto('locations')">Locations</div>
+</div>
+<div class="nav-right">
+<span class="nav-badge">11 BREAK HOUSES</span>
+<span class="nav-badge amber">7 LOCATIONS AT RISK</span>
+<span class="nav-badge green">4 CLEAN</span>
+<span class="nav-time" id="nav-clock">Sep 28, 2026 · 06:11 PM</span>
+</div>
+</nav>
+<!-- ══════════════════ OVERVIEW ══════════════════ -->
+<div class="page active" id="pg-overview">
+<div class="sec-hdr">
+<h2>Operations Overview</h2>
+<p>Current fleet status across 11 locations · 45 houses · 2026 production year</p>
+</div>
+<div class="kpi-grid">
+<div class="kpi red"><div class="kpi-val">11</div><div class="kpi-lbl">Houses on Break<br/>of 45 total (24%)</div><div class="kpi-delta down">▲ 6 locations affected</div></div>
+<div class="kpi"><div class="kpi-val">77,754</div><div class="kpi-lbl">Total Saleable Cases<br/>2026 YTD</div></div>
+<div class="kpi red"><div class="kpi-val">$662K</div><div class="kpi-lbl">Monthly Overhead<br/>on Break Houses</div><div class="kpi-delta down">$0 revenue return</div></div>
+<div class="kpi amber"><div class="kpi-val">$13.5M</div><div class="kpi-lbl">Operating Expense<br/>Jan–May 2026</div></div>
+<div class="kpi green"><div class="kpi-val">$174</div><div class="kpi-lbl">Est. Cost Per Case<br/>Jan–May avg</div></div>
+</div>
+<div class="grid-2" style="margin-bottom:16px;">
+<div class="card">
+<div class="card-title">Production by Location (Annual Cases)</div>
+<div class="chart-wrap h200"><canvas height="400" id="ov-bar" style="display: block; box-sizing: border-box; height: 200px; width: 395px;" width="791"></canvas></div>
+</div>
+<div class="card">
+<div class="card-title">Fleet Health Breakdown</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;">
+<div class="chart-wrap" style="height:200px;"><canvas height="400" id="ov-pie" style="display: block; box-sizing: border-box; height: 200px; width: 300px;" width="600"></canvas></div>
+<div style="display:flex;flex-direction:column;gap:10px;padding-left:8px;">
+<div><div style="font-size:22px;font-weight:900;color:var(--red);">11</div><div style="font-size:11px;color:var(--muted);">Infected houses</div></div>
+<div><div style="font-size:22px;font-weight:900;color:var(--green);">34</div><div style="font-size:11px;color:var(--muted);">Clean houses</div></div>
+<div><div style="font-size:22px;font-weight:900;color:var(--amber);">$7.9M</div><div style="font-size:11px;color:var(--muted);">Annual overhead on breaks</div></div>
+<div><div style="font-size:22px;font-weight:900;color:var(--blue);">~$4.8M</div><div style="font-size:11px;color:var(--muted);">Est. annual revenue loss</div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="card-title">Location Status Grid</div>
+<div class="loc-grid" id="ov-loc-grid"></div>
+</div>
+</div>
+<!-- ══════════════════ SIMULATION ══════════════════ -->
+<div class="page" id="pg-simulation">
+<div class="sec-hdr">
+<h2>Disease Outbreak Scenario Model</h2>
+<p>Configure spread parameters and run week-by-week simulation across all 45 houses</p>
+</div>
+<div class="sim-layout">
+<!-- Sidebar controls -->
+<div class="sidebar-card">
+<div>
+<div class="ctrl-label">Preset Scenarios</div>
+<div class="preset-row" style="margin-top:8px;">
+<div class="p-btn active" id="pb-baseline" onclick="loadPreset('baseline')">Status Quo</div>
+<div class="p-btn" id="pb-moderate" onclick="loadPreset('moderate')">Moderate Spread</div>
+<div class="p-btn" id="pb-severe" onclick="loadPreset('severe')">Severe Outbreak</div>
+<div class="p-btn" id="pb-phase" onclick="loadPreset('phase')">+ Phase Plan</div>
+</div>
+</div>
+<div>
+<div class="ctrl-label">Spread Dynamics</div>
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+<div class="field"><label>Within-cluster spread/wk <span id="vspread">8%</span></label><input max="60" min="0" oninput="sv('spread',this.value,'%')" type="range" value="8"/></div>
+<div class="field"><label>Cross-cluster spread/wk <span id="vcross">2%</span></label><input max="20" min="0" oninput="sv('cross',this.value,'%')" type="range" value="2"/></div>
+<div class="field"><label>Within-location house spread <span id="vwithin">12%</span></label><input max="60" min="0" oninput="sv('within',this.value,'%')" type="range" value="12"/></div>
+</div>
+</div>
+<div>
+<div class="ctrl-label">Hypothetical New Outbreak</div>
+<div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+<label class="chk-row"><input id="chk-ob" onchange="toggleOB()" type="checkbox"/> Inject new outbreak event</label>
+<div id="ob-opts" style="display:none;flex-direction:column;gap:6px;">
+<select id="ob-loc">
+<option value="sited">Site D (clean)</option>
+<option value="sitej">Site J (clean)</option>
+<option value="sitee">Site E (clean)</option>
+<option value="siteh">Site H (clean)</option>
+</select>
+<div class="field"><label>Trigger at week <span id="voweek">4</span></label><input id="s-oweek" max="26" min="1" oninput="sv('oweek',this.value,'')" type="range" value="4"/></div>
+</div>
+</div>
+</div>
+<div>
+<div class="ctrl-label">Intervention</div>
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+<div class="field"><label>Response delay <span id="vdelay">No action</span></label><input id="s-delay" max="52" min="0" oninput="updateDelay(this.value)" type="range" value="52"/></div>
+<div class="field"><label>Remediation weeks/location <span id="vremtime">8 wks</span></label><input max="16" min="3" oninput="sv('remtime',this.value,' wks')" type="range" value="8"/></div>
+<div class="field"><label>Locations treated per batch <span id="vbatch">2</span></label><input max="5" min="1" oninput="sv('batch',this.value,'')" type="range" value="2"/></div>
+</div>
+</div>
+<div>
+<div class="ctrl-label">Playback Speed</div>
+<div class="speed-row" style="margin-top:8px;">
+<div class="sp-btn active" id="sp-1" onclick="setSpeed(1,'1')">1×</div>
+<div class="sp-btn" id="sp-4" onclick="setSpeed(4,'4')">4×</div>
+<div class="sp-btn" id="sp-16" onclick="setSpeed(16,'16')">16×</div>
+<div class="sp-btn" id="sp-0" onclick="setSpeed(0,'0')">MAX</div>
+</div>
+</div>
+<div class="run-row">
+<button class="btn btn-run" id="btn-run" onclick="toggleRun()">▶ Run</button>
+<button class="btn btn-rst" onclick="resetSim()">↺ Reset</button>
+</div>
+<div>
+<div class="ctrl-label" style="margin-bottom:6px;">Activity Log</div>
+<div class="log" id="log"></div>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted);">
+<span style="display:flex;align-items:center;gap:4px;"><span class="h-dot clean" style="display:inline-block;"></span>Clean</span>
+<span style="display:flex;align-items:center;gap:4px;"><span class="h-dot infected" style="display:inline-block;"></span>Infected</span>
+<span style="display:flex;align-items:center;gap:4px;"><span class="h-dot remediating" style="display:inline-block;"></span>Remediating</span>
+<span style="display:flex;align-items:center;gap:4px;"><span class="h-dot restored" style="display:inline-block;"></span>Restored</span>
+</div>
+</div>
+<!-- Main sim area -->
+<div style="display:flex;flex-direction:column;gap:14px;">
+<!-- Week header -->
+<div class="week-hdr">
+<div>
+<div class="wk-num" id="wk-num">Week 0</div>
+<div class="wk-date" id="wk-date">Aug 2026</div>
+</div>
+<div class="wk-bar-wrap">
+<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
+<span>Progress</span><span id="wk-pct">0%</span>
+</div>
+<div class="wk-bar-track"><div class="wk-bar-fill" id="wk-fill" style="width:0%"></div></div>
+</div>
+<div class="wk-stats">
+<div class="wk-stat red"><div class="wk-stat-v" id="ws-break">11</div><div class="wk-stat-l">Break</div></div>
+<div class="wk-stat"><div class="wk-stat-v" id="ws-rem">0</div><div class="wk-stat-l">Remediating</div></div>
+<div class="wk-stat green"><div class="wk-stat-v" id="ws-prod">—</div><div class="wk-stat-l">Cases/yr</div></div>
+<div class="wk-stat"><div class="wk-stat-v" id="ws-loss">—</div><div class="wk-stat-l">Cumul. Loss</div></div>
+</div>
+<div class="event-pill" id="event-pill">⚠ New Outbreak!</div>
+</div>
+<!-- Charts -->
+<div class="grid-2">
+<div class="card card-sm">
+<div class="card-title">Weekly Production (Ann. Cases)</div>
+<div class="chart-legend">
+<div class="leg"><div class="leg-line" style="background:var(--green)"></div>No Action</div>
+<div class="leg"><div class="leg-line" style="background:var(--amber)"></div>Phase Plan</div>
+<div class="leg"><div class="leg-line" style="background:var(--blue)"></div>Immediate</div>
+<div class="leg"><div class="leg-line" style="background:var(--red)"></div>This Scenario</div>
+</div>
+<div class="chart-wrap h160"><canvas height="0" id="c-prod" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
+</div>
+<div class="card card-sm">
+<div class="card-title">Houses on Break</div>
+<div class="chart-legend">
+<div class="leg"><div class="leg-line" style="background:var(--green)"></div>No Action</div>
+<div class="leg"><div class="leg-line" style="background:var(--amber)"></div>Phase Plan</div>
+<div class="leg"><div class="leg-line" style="background:var(--blue)"></div>Immediate</div>
+<div class="leg"><div class="leg-line" style="background:var(--red)"></div>This Scenario</div>
+</div>
+<div class="chart-wrap h160"><canvas height="0" id="c-break" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
+</div>
+</div>
+<div class="card card-sm">
+<div class="card-title">Cumulative Financial Impact ($K)</div>
+<div class="chart-legend">
+<div class="leg"><div class="leg-line" style="background:var(--green)"></div>No Action</div>
+<div class="leg"><div class="leg-line" style="background:var(--amber)"></div>Phase Plan (incl. remediation)</div>
+<div class="leg"><div class="leg-line" style="background:var(--blue)"></div>Immediate Response</div>
+<div class="leg"><div class="leg-line" style="background:var(--red)"></div>This Scenario</div>
+</div>
+<div class="chart-wrap h160"><canvas height="0" id="c-cost" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
+</div>
+<!-- Live location grid -->
+<div class="card card-sm">
+<div class="card-title">Live Location Status</div>
+<div class="loc-grid" id="sim-loc-grid"></div>
+</div>
+<!-- End-state summary -->
+<div class="card card-sm" id="summary-card" style="display:none;">
+<div class="card-title">52-Week Simulation Results — Scenario Comparison</div>
+<div class="summary-grid">
+<div class="sum-card noaction"><div class="sum-label">No Action</div><div class="sum-val" id="s-noaction-loss">—</div><div class="sum-sub">Total financial loss</div></div>
+<div class="sum-card phase"><div class="sum-label">Phase Plan</div><div class="sum-val" id="s-phase-loss">—</div><div class="sum-sub">Total financial impact</div></div>
+<div class="sum-card immed"><div class="sum-label">Immediate Response</div><div class="sum-val" id="s-immed-loss">—</div><div class="sum-sub">Total financial impact</div></div>
+<div class="sum-card scenario"><div class="sum-label">This Scenario</div><div class="sum-val" id="s-this-loss">—</div><div class="sum-sub">Total financial impact</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ══════════════════ FINANCIAL ══════════════════ -->
+<div class="page" id="pg-financial">
+<div class="sec-hdr">
+<h2>Financial Impact Analysis</h2>
+<p>Break house cost exposure and 12-month cost-of-inaction projections</p>
+</div>
+<div class="kpi-grid">
+<div class="kpi red"><div class="kpi-val">$662K</div><div class="kpi-lbl">Monthly overhead<br/>on 11 break houses</div></div>
+<div class="kpi red"><div class="kpi-val">$7.9M</div><div class="kpi-lbl">Annual overhead<br/>on break houses</div></div>
+<div class="kpi amber"><div class="kpi-val">$4.8M</div><div class="kpi-lbl">Annual foregone<br/>revenue (@$250/case)</div></div>
+<div class="kpi red"><div class="kpi-val">$12.7M</div><div class="kpi-lbl">12-month cost<br/>of total inaction</div></div>
+<div class="kpi green"><div class="kpi-val">~$1.1M</div><div class="kpi-lbl">Est. phase plan<br/>total investment</div></div>
+</div>
+<div class="grid-2" style="margin-bottom:16px;">
+<div class="card">
+<div class="card-title">Monthly Operating Expense — Jan–May 2026 ($K)</div>
+<div class="chart-wrap h220"><canvas height="0" id="f-monthly" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
+</div>
+<div class="card">
+<div class="card-title">Expense Category Breakdown (Estimated)</div>
+<div class="chart-wrap h220"><canvas height="0" id="f-pie" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
+</div>
+</div>
+<div class="grid-2">
+<div class="card">
+<div class="card-title">Break House Financial Exposure by Location</div>
+<table class="fin-table">
+<thead><tr><th>Location</th><th>Break Houses</th><th class="r">Monthly Cost</th><th class="r">YTD (Jan–May)</th><th class="r">2026 Cases</th></tr></thead>
+<tbody id="fin-break-tbl"></tbody>
+</table>
+</div>
+<div class="card">
+<div class="card-title">12-Month Cost of Inaction</div>
+<table class="fin-table">
+<thead><tr><th>Cost Category</th><th class="r">12-Month Est.</th></tr></thead>
+<tbody>
+<tr><td>Operating overhead — break houses</td><td class="r">$7,946K</td></tr>
+<tr><td>Foregone revenue (@$250/case)</td><td class="r">$4,752K</td></tr>
+<tr><td>Disease spread risk premium (est.)</td><td class="r">$350K–$1,400K</td></tr>
+<tr><td>Deferred remediation cost premium</td><td class="r">$210K–$560K</td></tr>
+<tr class="total-row"><td>Total cost of inaction (low–high)</td><td class="r">$12.7M–$14.7M</td></tr>
+<tr class="total-row green"><td>Phase plan total investment</td><td class="r">~$0.9M–$1.3M</td></tr>
+</tbody>
+</table>
+<div style="margin-top:16px;background:#e8f8ee;border:1px solid #1e844933;border-radius:8px;padding:12px;font-size:12px;color:#1a5c30;line-height:1.6;">
+<strong>Net benefit of executing plan vs. inaction:</strong><br/>
+        $11.4M–$13.8M over 12 months — a 9–15× return on remediation investment, before accounting for the compounding risk of disease spread to currently clean locations.
+      </div>
+</div>
+</div>
+</div>
+<!-- ══════════════════ LOCATIONS ══════════════════ -->
+<div class="page" id="pg-locations">
+<div class="sec-hdr">
+<h2>Location Portfolio</h2>
+<p>Full detail view of all 11 SPF locations and 45 houses</p>
+</div>
+<div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);">
+<div class="kpi"><div class="kpi-val">11</div><div class="kpi-lbl">Total locations</div></div>
+<div class="kpi red"><div class="kpi-val">7</div><div class="kpi-lbl">On active break</div></div>
+<div class="kpi green"><div class="kpi-val">4</div><div class="kpi-lbl">Fully clean</div></div>
+<div class="kpi blue"><div class="kpi-val">0</div><div class="kpi-lbl">In remediation</div></div>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:12px;">
+<button class="p-btn active" onclick="filterLocs('all',this)" style="padding:6px 14px;border-radius:20px;">All</button>
+<button class="p-btn" onclick="filterLocs('break',this)" style="padding:6px 14px;border-radius:20px;">Break</button>
+<button class="p-btn" onclick="filterLocs('clean',this)" style="padding:6px 14px;border-radius:20px;">Clean</button>
+<button class="p-btn" onclick="filterLocs('east',this)" style="padding:6px 14px;border-radius:20px;">East</button>
+<button class="p-btn" onclick="filterLocs('central',this)" style="padding:6px 14px;border-radius:20px;">Central</button>
+<button class="p-btn" onclick="filterLocs('overseas',this)" style="padding:6px 14px;border-radius:20px;">Overseas</button>
+</div>
+<div class="loc-grid" id="loc-detail-grid"></div>
+</div>
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const LOCS = [
+  {id:'sitea', name:'Site A', cluster:'east', bh:2,th:5, prod:16532, bhouses:['A1', 'A2'], clean:['A3', 'A4', 'A5']},
+  {id:'siteb', name:'Site B', cluster:'east', bh:1,th:3, prod:11562, bhouses:['B1'], clean:['B2', 'B3']},
+  {id:'sitec', name:'Site C', cluster:'central', bh:1,th:3, prod:9055, bhouses:['C1'], clean:['C2', 'C3']},
+  {id:'sited', name:'Site D', cluster:'central', bh:0,th:3, prod:8080, bhouses:[], clean:['D1', 'D2', 'D3']},
+  {id:'sitee', name:'Site E', cluster:'overseas', bh:0,th:2, prod:6831, bhouses:[], clean:['E1', 'E2']},
+  {id:'sitef', name:'Site F', cluster:'central', bh:1,th:2, prod:5923, bhouses:['F1'], clean:['F2']},
+  {id:'siteg', name:'Site G', cluster:'central', bh:2,th:3, prod:5894, bhouses:['G1', 'G2'], clean:['G3']},
+  {id:'siteh', name:'Site H', cluster:'overseas', bh:0,th:2, prod:5405, bhouses:[], clean:['H1', 'H2']},
+  {id:'sitei', name:'Site I', cluster:'central', bh:2,th:3, prod:5182, bhouses:['I1', 'I2'], clean:['I3']},
+  {id:'sitej', name:'Site J', cluster:'central', bh:0,th:3, prod:3290, bhouses:[], clean:['J1', 'J2', 'J3']},
+  {id:'sitek', name:'Site K', cluster:'east', bh:2,th:2, prod:0, bhouses:['K1', 'K2'], clean:[]},
+];
+
+const WEEKS=52, SPF_PRICE=250, PER_HOUSE_WEEKLY=60.2/4.33;
+const TOTAL_BASELINE = LOCS.reduce((s,l)=>s+l.prod,0);
+
+const PHASE_PLAN=[
+  {loc:'sitek',startWeek:1,rem:8},{loc:'sitei',startWeek:1,rem:8},
+  {loc:'siteg',startWeek:9,rem:8},{loc:'sitef',startWeek:9,rem:6},
+  {loc:'sitec',startWeek:17,rem:6},{loc:'siteb',startWeek:20,rem:7},
+  {loc:'sitea',startWeek:24,rem:9},
+];
+
+// ── SIMULATION ENGINE ─────────────────────────────────────────────────────────
+function mkState(){
+  return LOCS.map(l=>({id:l.id,houses:Array.from({length:l.th},(_,i)=>i<l.bh?'infected':'clean'),rem:Array(l.th).fill(0)}));
+}
+function clone(s){return s.map(l=>({id:l.id,houses:[...l.houses],rem:[...l.rem]}));}
+function locI(id){return LOCS.findIndex(l=>l.id===id);}
+function locD(id){return LOCS.find(l=>l.id===id);}
+function prodOf(state){return state.reduce((s,loc)=>{const d=locD(loc.id);const p=loc.houses.filter(h=>h==='clean'||h==='restored').length;return s+p*(d.prod/d.th);},0);}
+function breakOf(state){return state.reduce((s,l)=>s+l.houses.filter(h=>h==='infected').length,0);}
+function remOf(state){return state.reduce((s,l)=>s+l.houses.filter(h=>h==='remediating').length,0);}
+function sameCluster(a,b){return locD(a).cluster===locD(b).cluster;}
+
+function stepState(state,p,week,ob){
+  const next=clone(state);
+  if(ob&&ob.week===week){const li=locI(ob.locId);if(li>=0){const ci=next[li].houses.findIndex(h=>h==='clean');if(ci>=0)next[li].houses[ci]='infected';}}
+  const prev=clone(state);
+  prev.forEach((prevLoc,li)=>{
+    const inf=prevLoc.houses.filter(h=>h==='infected').length;if(!inf)return;
+    const d=locD(prevLoc.id);const pressure=inf/d.th;
+    prevLoc.houses.forEach((h,hi)=>{if(h==='clean'&&Math.random()<p.within*pressure)next[li].houses[hi]='infected';});
+    LOCS.forEach((od,oi)=>{
+      if(oi===li)return;
+      const rate=sameCluster(prevLoc.id,od.id)?p.spread:p.cross;
+      if(Math.random()<rate*pressure){const ci=next[oi].houses.findIndex(h=>h==='clean');if(ci>=0)next[oi].houses[ci]='infected';}
+    });
+  });
+  if(p.intervention(week)){
+    let slots=p.batch||99;
+    next.forEach((loc,li)=>{
+      if(slots<=0)return;
+      if(p.phasePlan){const pl=PHASE_PLAN.find(x=>x.loc===loc.id);if(!pl||week<pl.startWeek)return;}
+      loc.houses.forEach((h,hi)=>{if(h==='infected'&&slots>0){next[li].houses[hi]='remediating';next[li].rem[hi]=p.remWeeks||8;slots--;}});
+    });
+  }
+  next.forEach((loc,li)=>{loc.houses.forEach((h,hi)=>{if(h==='remediating'){next[li].rem[hi]--;if(next[li].rem[hi]<=0)next[li].houses[hi]='restored';}});});
+  return next;
+}
+
+function simulate(p){
+  let state=mkState();const results=[];let cumLoss=0;
+  for(let w=0;w<WEEKS;w++){
+    const pr=prodOf(state),bc=breakOf(state),rc=remOf(state);
+    const revLoss=Math.max(0,(TOTAL_BASELINE-pr)*SPF_PRICE/52);
+    const remCost=p.remCostPerHouse?rc*p.remCostPerHouse:0;
+    cumLoss+=revLoss+remCost;
+    results.push({week:w,prod:pr,breakCount:bc,remCount:rc,cumLoss,snap:clone(state)});
+    state=stepState(state,p,w,p.ob||null);
+  }
+  return results;
+}
+
+const PRESETS={
+  baseline:{spread:0,cross:0,within:0,delay:52,rem:8,batch:2,ob:false},
+  moderate:{spread:12,cross:2,within:15,delay:52,rem:8,batch:2,ob:false},
+  severe:  {spread:35,cross:8,within:40,delay:52,rem:10,batch:2,ob:true,oLoc:'sited',oWeek:3},
+  phase:   {spread:12,cross:2,within:15,delay:0, rem:8,batch:3,ob:false},
+};
+
+function makeRef(extraP,overrides={}){
+  const def={...extraP,...overrides};
+  return simulate(def);
+}
+
+let simW=0,simResults=null,simTimer=null,running=false,speed=1;
+let refNA=null,refPP=null,refIM=null;
+let charts={};
+let logLines=[];
+
+function wkDate(w){const d=new Date(2026,7,3);d.setDate(d.getDate()+w*7);return d.toLocaleDateString('en-US',{month:'short',year:'numeric'});}
+function fmtK(v){return '$'+Math.round(v/1000).toLocaleString()+'K';}
+
+function addLog(msg,cls=''){
+  logLines.push(`<span class="${cls}">[W${String(simW).padStart(2,'0')}] ${msg}</span>`);
+  if(logLines.length>80)logLines.shift();
+  const el=document.getElementById('log');
+  el.innerHTML=logLines.join('<br>');
+  el.scrollTop=el.scrollHeight;
+}
+
+// ── CHARTS ───────────────────────────────────────────────────────────────────
+const COPTS=(yL)=>({responsive:true,maintainAspectRatio:false,animation:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${typeof c.raw==='number'&&c.raw>1000?fmtK(c.raw):Math.round(c.raw)}`}}},
+  scales:{x:{ticks:{maxTicksLimit:13,font:{size:9}},grid:{color:'#f0f0f0'}},
+          y:{title:{display:true,text:yL,font:{size:9}},ticks:{font:{size:9}},grid:{color:'#f0f0f0'}}}});
+
+function ds(label,color,data=[]){return{label,data:[...data],borderColor:color,backgroundColor:color+'18',borderWidth:2,pointRadius:0,fill:false,tension:0.3};}
+const WL=Array.from({length:WEEKS},(_,i)=>`W${i+1}`);
+
+function initCharts(){
+  const empty=Array(WEEKS).fill(null);
+  charts.prod=new Chart(document.getElementById('c-prod'),{type:'line',data:{labels:WL,datasets:[ds('No Action','#1e8449',empty),ds('Phase Plan','#d4891a',empty),ds('Immediate','#2563eb',empty),ds('This Scenario','#c0392b',empty)]},options:COPTS('Ann. Cases')});
+  charts.brk= new Chart(document.getElementById('c-break'),{type:'line',data:{labels:WL,datasets:[ds('No Action','#1e8449',empty),ds('Phase Plan','#d4891a',empty),ds('Immediate','#2563eb',empty),ds('This Scenario','#c0392b',empty)]},options:COPTS('Houses')});
+  charts.cost=new Chart(document.getElementById('c-cost'),{type:'line',data:{labels:WL,datasets:[ds('No Action','#1e8449',empty),ds('Phase Plan (incl. rem.)','#d4891a',empty),ds('Immediate','#2563eb',empty),ds('This Scenario','#c0392b',empty)]},options:COPTS('$K')});
+
+  // Overview bar
+  charts.bar=new Chart(document.getElementById('ov-bar'),{type:'bar',data:{labels:LOCS.map(l=>l.name.split(' ')[0]+'\n'+l.name.split(' ').slice(1).join(' ')),datasets:[{label:'Cases',data:LOCS.map(l=>l.prod),backgroundColor:LOCS.map(l=>l.bh>0?'#c0392b44':'#1e844944'),borderColor:LOCS.map(l=>l.bh>0?'#c0392b':'#1e8449'),borderWidth:2}]},options:{...COPTS('Ann. Cases'),plugins:{legend:{display:false}}}});
+
+  // Overview pie
+  charts.pie=new Chart(document.getElementById('ov-pie'),{type:'doughnut',data:{labels:['Break Houses','Clean Houses'],datasets:[{data:[11,34],backgroundColor:['#c0392b66','#1e844966'],borderColor:['#c0392b','#1e8449'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+
+  // Financial monthly
+  charts.monthly=new Chart(document.getElementById('f-monthly'),{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May'],datasets:[{label:'OpEx ($K)',data:[2821,2919,2660,2814,2324],backgroundColor:'#3a85a044',borderColor:'#3a85a0',borderWidth:2}]},options:{...COPTS('$K')}});
+
+  // Financial pie
+  charts.fpie=new Chart(document.getElementById('f-pie'),{type:'doughnut',data:{labels:['Feed & Nutrition','Labor','Veterinary','Utilities','Equipment','Transport','Other'],datasets:[{data:[4060,2240,1260,1120,980,840,1638],backgroundColor:['#3a85a0','#4da3c4','#6ec4d8','#1a4f60','#7fd4e8','#2a6a80','#90dff0'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10}}}}}});
+}
+
+function setRefLines(na,pp,im){
+  [charts.prod,charts.brk,charts.cost].forEach((c,ci)=>{
+    [na,pp,im].forEach((res,ri)=>{
+      c.data.datasets[ri].data=res.map(r=>ci===0?r.prod:ci===1?r.breakCount:r.cumLoss/1000);
+    });
+    c.update('none');
+  });
+}
+
+function updateScenLine(results){
+  [charts.prod,charts.brk,charts.cost].forEach((c,ci)=>{
+    c.data.datasets[3].data=results.map((r,i)=>{
+      if(i>simW)return null;
+      return ci===0?r.prod:ci===1?r.breakCount:r.cumLoss/1000;
+    });
+    c.update('none');
+  });
+}
+
+// ── LOCATION GRIDS ────────────────────────────────────────────────────────────
+function renderLocCard(loc,snap){
+  const d=LOCS.find(l=>l.id===loc.id);
+  const houses=snap?snap.find(s=>s.id===loc.id):null;
+  const houseStates=houses?houses.houses:Array.from({length:d.th},(_,i)=>i<d.bh?'infected':'clean');
+  const inf=houseStates.filter(h=>h==='infected').length;
+  const rem=houseStates.filter(h=>h==='remediating').length;
+  const res=houseStates.filter(h=>h==='restored').length;
+  const cln=houseStates.filter(h=>h==='clean').length;
+  const prod=((cln+res)/d.th)*d.prod;
+  const lossPct=d.prod>0?Math.round((1-prod/d.prod)*100):100;
+  let cls='clean',pill='pill-clean',pillTxt='CLEAN';
+  if(inf>0&&rem===0){cls='break';pill='pill-break';pillTxt='BREAK';}
+  else if(rem>0){cls='remediating';pill='pill-rem';pillTxt='REMEDIATING';}
+  else if(res>0&&inf===0){cls='restored';pill='pill-rest';pillTxt='RESTORED';}
+  const dots=houseStates.map(h=>`<div class="h-dot ${h==='restored'?'restored':h}"></div>`).join('');
+  const cluster=d.cluster.charAt(0).toUpperCase()+d.cluster.slice(1);
+  return `<div class="loc-card ${cls}" data-cluster="${d.cluster}" data-status="${cls}">
+    <div style="display:flex;justify-content:space-between;align-items:start;">
+      <div><div class="loc-name">${d.name}</div><div class="loc-cluster">${cluster}</div></div>
+      <span class="pill ${pill}">${pillTxt}</span>
+    </div>
+    <div class="house-row">${dots}</div>
+    <div class="loc-row">
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">${d.th} houses total<br>${inf>0?`<span style="color:var(--red);font-weight:700;">${inf} infected</span>`:''}${rem>0?` · ${rem} remediating`:''}${res>0?` · ${res} restored`:''}</div>
+      <div class="loc-stat"><div class="loc-stat-val" style="color:${lossPct>50?'var(--red)':lossPct>0?'var(--amber)':'var(--green)'}">${lossPct}%</div><div class="loc-stat-lbl">loss</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px;border-top:1px solid var(--border);padding-top:6px;">${Math.round(prod).toLocaleString()} / ${d.prod.toLocaleString()} cases/yr</div>
+  </div>`;
+}
+
+function renderLocGrid(containerId,snap){
+  const grid=document.getElementById(containerId);
+  grid.innerHTML=LOCS.map(l=>renderLocCard(l,snap)).join('');
+}
+
+// ── FINANCIAL TABLE ───────────────────────────────────────────────────────────
+function renderFinTable(){
+  const tbody=document.getElementById('fin-break-tbl');
+  const breakLocs=LOCS.filter(l=>l.bh>0);
+  let html='';
+  breakLocs.forEach(l=>{
+    const monthly=Math.round((60.2/4.33)*l.bh);
+    const ytd=Math.round(monthly*5);
+    html+=`<tr><td><b>${l.name}</b></td><td>${l.bhouses.join(', ')}</td><td class="r">~$${monthly.toLocaleString()}K</td><td class="r">~$${ytd.toLocaleString()}K</td><td class="r">${l.prod.toLocaleString()}</td></tr>`;
+  });
+  const totalMonthly=Math.round((60.2/4.33)*11);
+  html+=`<tr class="total-row"><td><b>TOTAL</b></td><td>11 houses</td><td class="r">~$${totalMonthly.toLocaleString()}K</td><td class="r">~$${Math.round(totalMonthly*5).toLocaleString()}K</td><td class="r">${LOCS.reduce((s,l)=>s+l.prod,0).toLocaleString()}</td></tr>`;
+  tbody.innerHTML=html;
+}
+
+// ── SIMULATION CONTROLS ───────────────────────────────────────────────────────
+function getP(){
+  const spread=+document.getElementById('s-spread'||null)?.value||0;
+  // Read all sliders
+  const getRng=id=>{const el=document.querySelector(`[oninput*="'${id}'"],[oninput*='"${id}"']`);return el?+el.value:0;};
+  const spreadV=+(document.querySelectorAll('input[type=range]')[0]?.value||8)/100;
+  const crossV= +(document.querySelectorAll('input[type=range]')[1]?.value||2)/100;
+  const withinV=+(document.querySelectorAll('input[type=range]')[2]?.value||12)/100;
+  const delayV= +(document.querySelectorAll('input[type=range]')[3]?.value||52);
+  const remV=   +(document.querySelectorAll('input[type=range]')[4]?.value||8);
+  const batchV= +(document.querySelectorAll('input[type=range]')[5]?.value||2);
+  const oWeekV= +(document.querySelectorAll('input[type=range]')[6]?.value||4);
+  const hasOB=document.getElementById('chk-ob')?.checked||false;
+  const oLoc=document.getElementById('ob-loc')?.value||'sited';
+  return{spread:spreadV,cross:crossV,within:withinV,remWeeks:remV,
+    intervention:delayV>=52?(()=>false):(w=>w>=delayV),
+    phasePlan:false,batch:batchV,
+    remCostPerHouse:delayV<52?PER_HOUSE_WEEKLY*1.5:0,
+    ob:hasOB?{locId:oLoc,week:oWeekV}:null};
+}
+
+function rebuildSim(){
+  const p=getP();
+  simResults=simulate(p);
+  const extra={spread:p.spread,cross:p.cross,within:p.within,ob:p.ob};
+  refNA=simulate({...extra,intervention:()=>false,batch:99,remCostPerHouse:0,remWeeks:8,phasePlan:false});
+  refPP=simulate({...extra,intervention:(w)=>true,phasePlan:true,batch:99,remCostPerHouse:PER_HOUSE_WEEKLY*1.5,remWeeks:8});
+  refIM=simulate({...extra,intervention:(w)=>w>=0,phasePlan:false,batch:5,remCostPerHouse:PER_HOUSE_WEEKLY*2,remWeeks:6});
+  setRefLines(refNA,refPP,refIM);
+  updateTick(0);
+  renderLocGrid('sim-loc-grid',simResults[0].snap);
+  document.getElementById('summary-card').style.display='none';
+}
+
+function updateTick(w){
+  if(!simResults||w>=simResults.length)return;
+  const r=simResults[w];
+  document.getElementById('wk-num').textContent=`Week ${w}`;
+  document.getElementById('wk-date').textContent=wkDate(w);
+  document.getElementById('wk-fill').style.width=`${(w/WEEKS)*100}%`;
+  document.getElementById('wk-pct').textContent=`${Math.round((w/WEEKS)*100)}%`;
+  document.getElementById('ws-break').textContent=r.breakCount;
+  document.getElementById('ws-rem').textContent=r.remCount;
+  document.getElementById('ws-prod').textContent=Math.round(r.prod).toLocaleString();
+  document.getElementById('ws-loss').textContent=fmtK(r.cumLoss);
+  updateScenLine(simResults);
+  renderLocGrid('sim-loc-grid',r.snap);
+}
+
+function tick(){
+  if(simW>=WEEKS){stopSim();showSummary();addLog('Simulation complete.','g');return;}
+  const r=simResults[simW];
+  const prev=simW>0?simResults[simW-1]:null;
+  if(prev){
+    const nb=r.breakCount-prev.breakCount;
+    if(nb>0)addLog(`${nb} house(s) newly infected. Total break: ${r.breakCount}`,'d');
+    const nr=r.remCount-prev.remCount;
+    if(nr>0)addLog(`${nr} house(s) began remediation.`,'w');
+    const pr=prev.snap.reduce((s,l)=>s+l.houses.filter(h=>h==='restored').length,0);
+    const cr=r.snap.reduce((s,l)=>s+l.houses.filter(h=>h==='restored').length,0);
+    if(cr>pr)addLog(`${cr-pr} house(s) restored to production.`,'g');
+  }
+  const p=getP();
+  if(p.ob&&p.ob.week===simW){
+    const ln=LOCS.find(l=>l.id===p.ob.locId)?.name||'';
+    addLog(`⚠ NEW OUTBREAK at ${ln}!`,'d');
+    const ep=document.getElementById('event-pill');
+    ep.textContent=`⚠ New outbreak: ${ln}`;
+    ep.className='event-pill show';
+    setTimeout(()=>{ep.className='event-pill';},5000);
+  }
+  updateTick(simW);
+  simW++;
+  if(speed===0){
+    simW=WEEKS;
+    updateTick(WEEKS-1);
+    renderLocGrid('sim-loc-grid',simResults[WEEKS-1].snap);
+    updateScenLine(simResults);
+    stopSim();showSummary();addLog('Done (max speed).','g');
+  } else {
+    simTimer=setTimeout(tick,Math.max(30,600/speed));
+  }
+}
+
+function showSummary(){
+  document.getElementById('summary-card').style.display='block';
+  const last=r=>r[WEEKS-1].cumLoss;
+  document.getElementById('s-noaction-loss').textContent=fmtK(last(refNA));
+  document.getElementById('s-phase-loss').textContent=fmtK(last(refPP));
+  document.getElementById('s-immed-loss').textContent=fmtK(last(refIM));
+  document.getElementById('s-this-loss').textContent=fmtK(last(simResults));
+}
+
+function stopSim(){clearTimeout(simTimer);running=false;document.getElementById('btn-run').textContent='▶ Run';}
+function toggleRun(){
+  if(running){stopSim();}
+  else{if(simW>=WEEKS)resetSim();running=true;document.getElementById('btn-run').textContent='⏸ Pause';tick();}
+}
+function resetSim(){stopSim();simW=0;logLines=[];document.getElementById('log').innerHTML='';document.getElementById('event-pill').className='event-pill';rebuildSim();}
+function setSpeed(s,id){speed=s;['1','4','16','0'].forEach(v=>document.getElementById(`sp-${v}`).classList.toggle('active',v===id));}
+
+function sv(id,val,suf){document.getElementById(`v${id}`).textContent=val+suf;}
+function updateDelay(v){const n=+v;document.getElementById('vdelay').textContent=n>=52?'No action':`${n} wks`;}
+function toggleOB(){const c=document.getElementById('chk-ob').checked;document.getElementById('ob-opts').style.display=c?'flex':'none';}
+
+function loadPreset(key){
+  const p=PRESETS[key];
+  const rngs=document.querySelectorAll('input[type=range]');
+  rngs[0].value=p.spread;sv('spread',p.spread,'%');
+  rngs[1].value=p.cross; sv('cross',p.cross,'%');
+  rngs[2].value=p.within;sv('within',p.within,'%');
+  rngs[3].value=p.delay; updateDelay(p.delay);
+  rngs[4].value=p.rem;   sv('remtime',p.rem,' wks');
+  rngs[5].value=p.batch; sv('batch',p.batch,'');
+  document.getElementById('chk-ob').checked=p.ob||false;
+  document.getElementById('ob-opts').style.display=(p.ob)?'flex':'none';
+  if(p.oLoc)document.getElementById('ob-loc').value=p.oLoc;
+  if(p.oWeek){rngs[6].value=p.oWeek;sv('oweek',p.oWeek,'');}
+  ['baseline','moderate','severe','phase'].forEach(k=>document.getElementById(`pb-${k}`).classList.toggle('active',k===key));
+  resetSim();addLog(`Preset loaded: ${key}`,'');
+}
+
+// ── NAV PAGES ─────────────────────────────────────────────────────────────────
+function goto(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(`pg-${page}`).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>{if(t.textContent.toLowerCase().includes(page.replace('overview','overview').replace('simulation','outbreak').replace('financial','financial').replace('locations','location')))t.classList.add('active');});
+  // re-map tab labels
+  const tabs=['overview','simulation','financial','locations'];
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===page));
+}
+
+function filterLocs(filter,btn){
+  document.querySelectorAll('.loc-detail-grid .loc-card, #loc-detail-grid .loc-card').forEach(c=>{
+    const cluster=c.dataset.cluster;const status=c.dataset.status;
+    const show=filter==='all'||(filter==='break'&&status==='break')||(filter==='clean'&&(status==='clean'||status==='restored'))||(cluster===filter);
+    c.style.display=show?'':'none';
+  });
+  document.querySelectorAll('[onclick^="filterLocs"]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── CLOCK ─────────────────────────────────────────────────────────────────────
+function updateClock(){
+  const now=new Date();
+  document.getElementById('nav-clock').textContent=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' · '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  initCharts();
+  renderLocGrid('ov-loc-grid',null);
+  renderLocGrid('loc-detail-grid',null);
+  renderFinTable();
+  rebuildSim();
+  updateClock();
+  setInterval(updateClock,30000);
+  addLog('Dashboard ready. Select a scenario and click Run.','g');
+  addLog(`Current fleet: 11 break houses across 7 locations.`,'w');
+  addLog(`4 clean locations at risk from spread.`,'');
+});
+</script>
+</body></html>
