@@ -47,6 +47,10 @@ h1,h2,h3{font-family:var(--serif);color:var(--ink);font-weight:600;text-wrap:bal
 .intro{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:56px;padding-block:64px 56px;border-bottom:1px solid var(--line)}
 h1{font-size:clamp(2.4rem,6vw,3.4rem);line-height:1.08;margin-bottom:10px;letter-spacing:-.01em}
 .role{font-size:1.15rem;color:var(--muted);margin:0 0 28px}
+.id{display:flex;align-items:center;gap:24px;margin-bottom:28px}
+.id .role{margin:0}
+.headshot{width:120px;height:120px;border-radius:50%;object-fit:cover;flex:none;border:3px solid var(--soft);box-shadow:0 0 0 2px var(--green)}
+@media (max-width:480px){.id{gap:16px}.headshot{width:88px;height:88px}}
 .bio p{margin:0 0 16px;max-width:64ch}
 .facts{align-self:start;background:var(--soft);border:1px solid var(--line);border-top:4px solid var(--green);padding:10px 20px 6px;border-radius:4px;display:grid;gap:0}
 .facts div{padding:12px 0;border-bottom:1px solid var(--line)}
@@ -144,8 +148,13 @@ h3{font-size:1.55rem;line-height:1.2}
 
   <header class="intro">
     <div>
-      <h1>Harrison Neil</h1>
-      <p class="role">Business Analytics &amp; Information Systems · Suffolk University</p>
+      <div class="id">
+        <img class="headshot" src="headshot.jpg" alt="Headshot of Harrison Neil" width="120" height="120">
+        <div>
+          <h1>Harrison Neil</h1>
+          <p class="role">Business Analytics &amp; Information Systems · Suffolk University</p>
+        </div>
+      </div>
       <div class="bio">
         <p>I'm a Business Analytics and Information Systems student at Suffolk University with a concentration in Artificial Intelligence, holding a 3.7 GPA and a place on the Dean's List. I also compete on Suffolk's NCAA varsity men's basketball team. Before Suffolk, I studied Business and Management at Rensselaer Polytechnic Institute.</p>
         <p>My work focuses on using data to support real decisions. As an Associate Process Analyst at AVS Bio, I applied machine learning, AI and data analytics to an SPF egg production supply chain to improve operational efficiency. On my own, I build analytics projects, from an outbreak scenario model for egg production operations to regression studies of NBA strategy and a machine-learning model that projects NFL player performance.</p>
